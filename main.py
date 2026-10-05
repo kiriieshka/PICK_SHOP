@@ -27,7 +27,7 @@ async def run_http():
 async def run_bot():
     if not BOT_TOKEN:
         raise RuntimeError("BOT_TOKEN is not set")
-    validate_config()
+    # validate_config()
     await init_db()
     bot = Bot(BOT_TOKEN)
     dp = Dispatcher()
