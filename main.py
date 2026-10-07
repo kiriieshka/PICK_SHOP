@@ -6,7 +6,6 @@ import uvicorn
 from config import BOT_TOKEN
 from bot.database.db import init_db, close_db
 from bot.handlers import start, shop, order, admin
-from bot.services.yookassa_service import validate_config
 
 app = FastAPI(title="Basketball Shop Bot")
 
