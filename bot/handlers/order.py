@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery,Message
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
 from aiogram import Bot
-from config import ADMIN_ID,BOT_TOKEN
+from config import ADMIN_IDS,BOT_TOKEN
 from bot.states.order_states import OrderStates
 from bot.database.db import get_latest_paid_paper_order,get_order,set_order_details
 from bot.keyboards.shop import products
