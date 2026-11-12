@@ -19,8 +19,7 @@ async def process_yookassa_event(payload):
     if not payment_id:
         return
 
-    # The webhook body is treated as a trigger only.
-    # We ask YooKassa for the payment itself before delivering anything.
+    # Проверяем платёж непосредственно через YooKassa
     payment = get_payment(payment_id)
 
     if payment.status != "succeeded" or payment.paid is not True:
@@ -31,11 +30,11 @@ async def process_yookassa_event(payload):
     if not order:
         return
 
-    # Idempotency: YooKassa may retry the same webhook.
+    # Защита от повторной обработки webhook
     if order["status"] in ("paid", "details_received"):
         return
 
-    # Make sure the payment is for the amount recorded in our order.
+    # Проверяем сумму платежа
     paid_value = float(payment.amount.value)
     order_value = float(order["amount"])
 
@@ -55,6 +54,7 @@ async def process_yookassa_event(payload):
                 order["telegram_id"],
             )
 
+            # Сообщение покупателю
             await bot.send_message(
                 order["telegram_id"],
                 "✅ Оплата прошла успешно!\n\n"
@@ -65,19 +65,22 @@ async def process_yookassa_event(payload):
                 parse_mode="HTML",
             )
 
+            # Уведомление администраторам
             if ADMIN_IDS:
-                await bot.send_message(
-                    ADMIN_IDS,
-                    "💻 ПРОДАЖА ЭЛЕКТРОННОЙ ВЕРСИИ\n\n"
-                    f"Заказ #{order['id']}\n"
-                    f"Сумма: {order['amount']} ₽\n"
-                    f"Telegram ID: {order['telegram_id']}\n"
-                    f"Payment ID: {payment_id}\n"
-                    f"Ключ: <code>{code}</code>",
-                    parse_mode="HTML",
-                )
+                for admin_id in ADMIN_IDS:
+                    await bot.send_message(
+                        admin_id,
+                        "💻 ПРОДАЖА ЭЛЕКТРОННОЙ ВЕРСИИ\n\n"
+                        f"Заказ #{order['id']}\n"
+                        f"Сумма: {order['amount']} ₽\n"
+                        f"Telegram ID: {order['telegram_id']}\n"
+                        f"Payment ID: {payment_id}\n"
+                        f"Ключ: <code>{code}</code>",
+                        parse_mode="HTML",
+                    )
 
         elif order["product"] == "paper":
+            # Сообщение покупателю
             await bot.send_message(
                 order["telegram_id"],
                 f"✅ Оплата заказа #{order['id']} "
@@ -86,16 +89,17 @@ async def process_yookassa_event(payload):
                 "Чтобы оформить доставку, отправьте /delivery.",
             )
 
+            # Уведомление администраторам
             if ADMIN_IDS:
                 for admin_id in ADMIN_IDS:
                     await bot.send_message(
-                        ADMIN_IDS,
+                        admin_id,
                         f"💳 ОПЛАЧЕН ЗАКАЗ #{order['id']}\n\n"
                         f"📦 Бумажная версия — {order['amount']} ₽\n"
                         f"Telegram ID: {order['telegram_id']}\n"
                         f"Payment ID: {payment_id}\n\n"
                         "Ожидаются ФИО и адрес.",
-                        )
+                    )
 
     finally:
         await bot.session.close()
