@@ -87,14 +87,15 @@ async def process_yookassa_event(payload):
             )
 
             if ADMIN_IDS:
-                await bot.send_message(
-                    ADMIN_IDS,
-                    f"💳 ОПЛАЧЕН ЗАКАЗ #{order['id']}\n\n"
-                    f"📦 Бумажная версия — {order['amount']} ₽\n"
-                    f"Telegram ID: {order['telegram_id']}\n"
-                    f"Payment ID: {payment_id}\n\n"
-                    "Ожидаются ФИО и адрес.",
-                )
+                for admin_id in ADMIN_IDS:
+                    await bot.send_message(
+                        ADMIN_IDS,
+                        f"💳 ОПЛАЧЕН ЗАКАЗ #{order['id']}\n\n"
+                        f"📦 Бумажная версия — {order['amount']} ₽\n"
+                        f"Telegram ID: {order['telegram_id']}\n"
+                        f"Payment ID: {payment_id}\n\n"
+                        "Ожидаются ФИО и адрес.",
+                        )
 
     finally:
         await bot.session.close()
