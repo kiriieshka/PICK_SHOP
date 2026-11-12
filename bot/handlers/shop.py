@@ -15,9 +15,9 @@ async def shop_back(c: CallbackQuery):
 async def buy(c: CallbackQuery):
     product=c.data.split(":",1)[1]
     if product=="electronic":
-        amount,title=1,"Электронная версия BASKETBALL CHALLENGE"
+        amount,title=1000,"Электронная версия BASKETBALL CHALLENGE"
     elif product=="paper":
-        amount,title=1,"Бумажная версия BASKETBALL CHALLENGE"
+        amount,title=2500,"Бумажная версия BASKETBALL CHALLENGE"
     else:
         await c.answer("Неизвестный товар.",show_alert=True)
         return

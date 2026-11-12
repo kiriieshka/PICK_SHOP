@@ -50,10 +50,10 @@ async def address(message:Message,state:FSMContext):
     await set_order_details(order_id,data["full_name"],value)
     await state.clear()
     await message.answer(f"✅ Заказ #{order_id} оформлен!\n\n📦 Бумажная версия\nДанные для доставки получены.",reply_markup=products())
-    if ADMIN_ID:
+    if ADMIN_IDS:
         bot=Bot(BOT_TOKEN)
         try:
-            await bot.send_message(ADMIN_ID,
+            await bot.send_message(ADMIN_IDS,
                 f"📦 НОВЫЙ ЗАКАЗ #{order_id}\n\nТовар: БУМАЖНАЯ ВЕРСИЯ\n"
                 f"Сумма: {order['amount']} ₽\nСтатус: ОПЛАЧЕНО\n\n"
                 f"👤 ФИО:\n{data['full_name']}\n\n📍 Адрес:\n{value}\n\n"
