@@ -1,6 +1,6 @@
 from aiogram import Bot
 
-from config import BOT_TOKEN, ADMIN_ID
+from config import BOT_TOKEN, ADMIN_IDS
 from bot.database.db import (
     get_order_by_payment,
     mark_paid,
