@@ -65,9 +65,9 @@ async def process_yookassa_event(payload):
                 parse_mode="HTML",
             )
 
-            if ADMIN_ID:
+            if ADMIN_IDS:
                 await bot.send_message(
-                    ADMIN_ID,
+                    ADMIN_IDS,
                     "💻 ПРОДАЖА ЭЛЕКТРОННОЙ ВЕРСИИ\n\n"
                     f"Заказ #{order['id']}\n"
                     f"Сумма: {order['amount']} ₽\n"
@@ -86,9 +86,9 @@ async def process_yookassa_event(payload):
                 "Чтобы оформить доставку, отправьте /delivery.",
             )
 
-            if ADMIN_ID:
+            if ADMIN_IDS:
                 await bot.send_message(
-                    ADMIN_ID,
+                    ADMIN_IDS,
                     f"💳 ОПЛАЧЕН ЗАКАЗ #{order['id']}\n\n"
                     f"📦 Бумажная версия — {order['amount']} ₽\n"
                     f"Telegram ID: {order['telegram_id']}\n"
